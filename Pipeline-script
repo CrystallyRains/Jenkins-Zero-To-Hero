@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Assuming your HelloWorld.java is in a Git repository
+                // Change the URL to your repository URL
+                git 'https://your-repo-url.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Create the directory structure
+                    sh 'mkdir -p classes'
+                    // Compile the Java program
+                    sh 'javac -d classes HelloWorld.java'
+                }
+            }
+        }
+
+        stage('Run') {
+            steps {
+                script {
+                    // Run the Java program
+                    sh 'java -cp classes HelloWorld'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up the workspace
+            cleanWs()
+        }
+    }
+}
